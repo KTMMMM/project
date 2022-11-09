@@ -2,7 +2,7 @@
 import mediapipe as mp
 import cv2
 import numpy as np
-contour_list = [152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109,10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377]
+
 
 def select_color(R,G,B):         
     mR = np.mean(R)
@@ -30,7 +30,8 @@ def select_color(R,G,B):
     }
     return max(similar_color)
 
-def skin_detect(path):
+def skin_detect(img):
+    contour_list = [152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109,10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377]
     point_list=[]
     B = []
     G = []
@@ -41,7 +42,8 @@ def skin_detect(path):
                                 max_num_faces=1,
                                 refine_landmarks=True,
                                 min_detection_confidence=0.5) as face_mesh:
-        image = cv2.imread(path)
+        # image = cv2.imread(path)
+        image = img
                         # Convert the BGR image to RGB before processing.
         results = face_mesh.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         # Print and draw face mesh landmarks on the image.
@@ -62,6 +64,6 @@ def skin_detect(path):
                 R.append(colors[2])
                 
     result = select_color(R,G,B)
-    print(result)
+    # print(result)
     return result
 

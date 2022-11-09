@@ -5,6 +5,7 @@ import os
 import numpy as np
 import math
 import joblib
+from sklearn.preprocessing import StandardScaler
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -27,14 +28,15 @@ def distance(p1, p2):
     result = math.sqrt((p1[0]-p2[0])**2 + (p1[0]-p2[0])**2)
     return result
 
-def extract_facedata(path):
+def extract_facedata(img):
     mp_face_mesh = mp.solutions.face_mesh
 
     with mp_face_mesh.FaceMesh(static_image_mode=True,
                                 max_num_faces=1,
                                 refine_landmarks=True,
                                 min_detection_confidence=0.5) as face_mesh:
-            image = cv2.imread(path)
+            image = img
+            # image = cv2.imread(img)
             # Convert the BGR image to RGB before processing.
             results = face_mesh.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
@@ -108,10 +110,12 @@ def extract_facedata(path):
                             d2/d1, d1/d3, d2/d3, d1/d5, d6/d5, d4_l/d6, d4_r/d6, d6/d1, d5/d2, d4_l/d5, d4_r/d6, d7/d6])
             return data
         
-def face_classifi(path):
-    img = extract_facedata(path)
+def face_classifi(image):
+    scalers = joblib.load('character/scalers.pkl')
+    img = extract_facedata(image)
     img = img.reshape(1,-1)
+    img = scalers.transform(img)
     svm_load_model = joblib.load('character/rbf_face_class_v4.pkl')
     pred = svm_load_model.predict(img)
-    print(pred[0])
+    # print(pred)
     return pred[0]
