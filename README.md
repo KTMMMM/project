@@ -1,6 +1,6 @@
 ## Installation
 
-Requires `python>=3.10`
+Requires `python=3.10`
 
 ```bash
 python -m venv .venv
