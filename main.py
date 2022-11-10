@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, Form
+from fastapi import FastAPI, File, Form, Request
 import mediapipe as mp
 import cv2
 from character.detect_shape import face_classifi
@@ -15,6 +15,7 @@ def read_rood():
 
 @app.post("/files/")
 async def create_file(file: bytes= File(...)):
+    print("얼굴 데이터터")
     image = np.array(Image.open(io.BytesIO(file)))
     image = cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
     fshape = face_classifi(image)
