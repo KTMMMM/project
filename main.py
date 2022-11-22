@@ -14,7 +14,7 @@ class Item(BaseModel):
     id : str
     time : str
     x : str
-    y : str
+    z : str
     
 class coorperates(BaseModel):
     coorperate : Optional[List[Item]] = None
