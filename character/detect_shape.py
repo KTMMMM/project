@@ -111,11 +111,15 @@ def extract_facedata(img):
             return data
         
 def face_classifi(image):
+    shape_class_dict={'Oblong':'Square',
+                  'Round':'Circle',
+                  'Oval':'Oval',
+                  'Square':'Triangle'}
     scalers = joblib.load('character/scalers.pkl')
     img = extract_facedata(image)
     img = img.reshape(1,-1)
     img = scalers.transform(img)
     svm_load_model = joblib.load('character/rbf_face_class_v4.pkl')
     pred = svm_load_model.predict(img)
-    # print(pred)
-    return pred[0]
+    final_result = shape_class_dict[pred[0]]
+    return final_result

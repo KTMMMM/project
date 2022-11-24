@@ -3,6 +3,7 @@ import mediapipe as mp
 import cv2
 from character.detect_shape import face_classifi
 from character.skincolor import skin_detect
+from useranalyze.analysis_data import user_correlation
 import io
 import numpy as np
 from PIL import Image
@@ -38,5 +39,6 @@ async def face_analysis(file: bytes= File(...)):
     
 @app.post("/user-analysis")
 async def user_correlation(item:coorperates):
+    user_correlation(item)
     print(item)
     return item
