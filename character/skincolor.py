@@ -27,7 +27,7 @@ def select_color(R,G,B):
         'color4': np.sum(color*preset4)/(color_norm*preset4_norm)
 
     }
-    print(similar_color)
+    # print(similar_color)
     return max(similar_color, key = similar_color.get)
 
 def skin_detect(img):

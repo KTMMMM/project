@@ -9,7 +9,9 @@ import numpy as np
 from PIL import Image
 from pydantic import BaseModel
 from typing import Optional, List
+from datetime import datetime
 
+now = datetime.now()
 
 class Item(BaseModel):
     id : str
@@ -32,8 +34,7 @@ async def face_analysis(file: bytes= File(...)):
     image = cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
     fshape = face_classifi(image)
     sColor = skin_detect(image)
-    print(sColor)
-    print("얼굴 데이터 완료")
+    print("얼굴 데이터 완료 ",now)
     return {"face shape" : fshape,
             "skin color" : sColor}
     
