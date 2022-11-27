@@ -105,7 +105,8 @@ def user_relationship(user_data):
                      "보낸 시간":int(place_time)
                      }
         result.append(user_info)
-    return result
+    json_data = {"result":result}
+    return json_data
 
 # 1. 놀이터 학교 장소 df 구하기
 # 학교 : x:-21.8 ~ 20.8      z: 7.92 ~ 57
