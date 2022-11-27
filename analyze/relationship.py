@@ -88,10 +88,6 @@ def user_relationship(user_data):
         place_list = [item for item in place_list if not(pd.isnull(item)) == True]
         most_place = max(place_list, key = place_list.count)  #가장 많이 논 곳
         place_time = location_df[id].value_counts().max() * 10  #가장 많이 논 곳 에서 보낸 시간초단위 
-        # print("my id :",id_relation)
-        # print("friend :",most_friendly)
-        # print("friend2 :",second_friendly)
-        # print("with :",spend_time,"sec \n")
         user_info = {
                      'childid':id,
                      "friends":[
@@ -134,9 +130,6 @@ def user_location(user_data):
     #     place_list = [item for item in place_list if not(pd.isnull(item)) == True]
     #     most_place = max(place_list, key = place_list.count)  #가장 많이 논 곳
     #     place_time = location_df[id_location].value_counts().max() * 10  #가장 많이 논 곳 에서 보낸 시간초단위 
-    #     print("id :",id_location)
-    #     print("place :",most_place)
-    #     print("spend time :",place_time,"sec \n")
     return location_df
     
 # 2. 접속시간
