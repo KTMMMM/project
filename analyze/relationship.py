@@ -82,7 +82,8 @@ def user_relationship(user_data):
         secondly_list = [item for item in secondly_list if not(pd.isnull(item)) == True]
         most_friendly = max(friendly_list, key = friendly_list.count)
         second_friendly = max(secondly_list, key = secondly_list.count)
-        spend_time = friendly_df[id].value_counts().max() * 10
+        spend_time_with_most = friendly_df[id].value_counts().max() * 10
+        spend_time_with_second = secondly_df[id].value_counts().max() * 10
         place_list = location_df[id].values
         place_list = [item for item in place_list if not(pd.isnull(item)) == True]
         most_place = max(place_list, key = place_list.count)  #가장 많이 논 곳
@@ -94,9 +95,10 @@ def user_relationship(user_data):
         user_info = {
                      'childid':id,
                      "friends":[
-                         {"bestfriend":most_friendly,
-                          "같이논 시간":int(spend_time),
-                          "bestfriend2":second_friendly
+                         {"bestfriend_1":most_friendly,
+                          "같이논 시간_1":int(spend_time_with_most),
+                          "bestfriend_2":second_friendly,
+                          "같이논 시간_2":int(spend_time_with_second)
                           }
                          ],
                      "논장소":most_place,
