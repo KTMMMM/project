@@ -96,13 +96,13 @@ def user_relationship(user_data):
                      'childid':id,
                      "friends":[
                          {"bestfriend_1":most_friendly,
-                          "같이논 시간_1":int(spend_time_with_most),
+                          "time_1":int(spend_time_with_most),
                           "bestfriend_2":second_friendly,
-                          "같이논 시간_2":int(spend_time_with_second)
+                          "time_2":int(spend_time_with_second)
                           }
                          ],
-                     "논장소":most_place,
-                     "보낸 시간":int(place_time)
+                     "place":most_place,
+                     "spend time":int(place_time)
                      }
         result.append(user_info)
     json_data = {"result":result}

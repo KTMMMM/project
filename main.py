@@ -42,5 +42,5 @@ async def face_analysis(file: bytes= File(...)):
 @app.post("/user-analysis")
 async def user_correlation(item:coorperates):
     result = json.dumps(user_relationship(item))
-    # user_relationship(item)
+    result = json.loads(result)
     return result
