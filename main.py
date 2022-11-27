@@ -10,6 +10,7 @@ from PIL import Image
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
+import json
 
 now = datetime.now()
 
@@ -40,6 +41,6 @@ async def face_analysis(file: bytes= File(...)):
     
 @app.post("/user-analysis")
 async def user_correlation(item:coorperates):
-    user_relationship(item)
-    # print(item)
-    return '작업중'
+    result = json.dumps(user_relationship(item))
+    # user_relationship(item)
+    return result

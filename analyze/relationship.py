@@ -30,17 +30,27 @@ def get_user_data(user_data):
         log_Users.append('{}'.format(i))
         
     log_Table = pd.concat([globals()['userid_{}'.format(i)] for i in log_Users], axis=1)
-    log_Table.fillna('No data',inplace=True)
+    log_Table.fillna('Offline',inplace=True)
     # print(log_Table)
     return log_Table
 
 def user_relationship(user_data):
+    result = []
     log_df = get_user_data(user_data)
     user_columns = log_df.columns
     time_index_list = log_df.index
+    friendly_df = pd.DataFrame(columns=user_columns, index=time_index_list)
+    secondly_df = pd.DataFrame(columns=user_columns, index=time_index_list)
+    # print(result_df)
     for time_recorded in time_index_list:
+        nearly_user_name=''
+        second_user_name=''
+        base_user_name=''
         selected_df = log_df.loc[[time_recorded]]
+        # print(selected_df) 
         for target_user in range(len(user_columns)):
+            nearly_user_distance = 999
+            second_user_distance = 999
             for compare_user in range(len(user_columns)):
                 if user_columns[target_user] == user_columns[compare_user]:   # 같은 유저일 경우 패스
                     pass
@@ -48,9 +58,82 @@ def user_relationship(user_data):
                     target, compare = user_columns[target_user], user_columns[compare_user]
                     target_data = selected_df[target].values[0]
                     compare_data = selected_df[compare].values[0]
-                    if target_data !="No data" and compare_data != "No data":
-                        # print(target_data[0],compare_data[0])
-                        # print("target :",target,"///",target_data," : ",type(target_data))
-                        # print("compare :",compare,"///",compare_data," : ",type(compare_data))
-                        print(target,"-",compare," distance :",distance(target_data,compare_data))
-    return '작업중'
+                    if target_data !="Offline" and compare_data != "Offline":
+                        between_user_dis = distance(target_data, compare_data)
+                        if between_user_dis < nearly_user_distance :
+                            second_user_distance = nearly_user_distance
+                            nearly_user_distance = between_user_dis
+                            base_user_name =target
+                            second_user_name = nearly_user_name
+                            nearly_user_name=compare
+                        elif second_user_distance > between_user_dis:
+                            second_user_distance=between_user_dis
+                            base_user_name =target
+                            second_user_name=compare
+
+            if nearly_user_distance != 999:     
+                friendly_df.loc[time_recorded,base_user_name]=nearly_user_name
+                secondly_df.loc[time_recorded,base_user_name]=second_user_name
+    location_df = user_location(user_data)
+    for id in user_columns:
+        friendly_list = friendly_df[id].values
+        friendly_list = [item for item in friendly_list if not(pd.isnull(item)) == True]
+        secondly_list = secondly_df[id].values
+        secondly_list = [item for item in secondly_list if not(pd.isnull(item)) == True]
+        most_friendly = max(friendly_list, key = friendly_list.count)
+        second_friendly = max(secondly_list, key = secondly_list.count)
+        spend_time = friendly_df[id].value_counts().max() * 10
+        place_list = location_df[id].values
+        place_list = [item for item in place_list if not(pd.isnull(item)) == True]
+        most_place = max(place_list, key = place_list.count)  #가장 많이 논 곳
+        place_time = location_df[id].value_counts().max() * 10  #가장 많이 논 곳 에서 보낸 시간초단위 
+        # print("my id :",id_relation)
+        # print("friend :",most_friendly)
+        # print("friend2 :",second_friendly)
+        # print("with :",spend_time,"sec \n")
+        user_info = {
+                     'childid':id,
+                     "friends":[
+                         {"bestfriend":most_friendly,
+                          "같이논 시간":int(spend_time),
+                          "bestfriend2":second_friendly
+                          }
+                         ],
+                     "논장소":most_place,
+                     "보낸 시간":int(place_time)
+                     }
+        result.append(user_info)
+    return result
+
+# 1. 놀이터 학교 장소 df 구하기
+# 학교 : x:-21.8 ~ 20.8      z: 7.92 ~ 57
+# 놀이터 : x:-18.07 ~ 12.55  z: -19.17 ~ 7.57
+
+# z값이 -19.17~7.57//7.92~57
+def user_location(user_data):
+    log_df = get_user_data(user_data)
+    user_columns = log_df.columns
+    time_index_list = log_df.index
+    location_df = pd.DataFrame(columns=user_columns, index=time_index_list)
+    for time_recorded in time_index_list:
+        selected_df = log_df.loc[[time_recorded]]
+        for target in user_columns:
+            target_data = selected_df[target].values[0]
+            if target_data != 'Offline':
+                if target_data[1] <= 7.57 :
+                    target_data='놀이터'  
+                else :
+                    target_data='학교'
+            location_df.loc[time_recorded,target]=target_data
+    location_df = location_df.replace("Offline",np.NaN)
+    # for id_location in user_columns:
+    #     place_list = location_df[id_location].values
+    #     place_list = [item for item in place_list if not(pd.isnull(item)) == True]
+    #     most_place = max(place_list, key = place_list.count)  #가장 많이 논 곳
+    #     place_time = location_df[id_location].value_counts().max() * 10  #가장 많이 논 곳 에서 보낸 시간초단위 
+    #     print("id :",id_location)
+    #     print("place :",most_place)
+    #     print("spend time :",place_time,"sec \n")
+    return location_df
+    
+# 2. 접속시간
