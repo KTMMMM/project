@@ -29,7 +29,6 @@ def get_user_data(user_data):
         log_Users.append('{}'.format(i)) 
     log_Table = pd.concat([globals()['userid_{}'.format(i)] for i in log_Users], axis=1)
     log_Table.fillna('Offline',inplace=True)
-    # print(log_Table)
     return log_Table
 
 def user_relationship(user_data):
