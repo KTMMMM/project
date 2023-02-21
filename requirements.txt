@@ -17,7 +17,7 @@ h11==0.14.0
 heatmappy==0.2.6
 idna==3.4
 ipykernel==6.17.1
-ipython==8.6.0
+ipython==8.10.0
 jedi==0.18.1
 joblib==1.2.0
 jupyter_client==7.4.5
